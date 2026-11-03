@@ -34,10 +34,12 @@ Voraussetzung: Android 8.0 oder neuer und ein Kalender, der auf dem Handy synchr
    (alle Versionen unter [Releases](https://github.com/NicklasThiele/Terminwecker/releases)).
 2. Die heruntergeladene Datei antippen. Android fragt einmalig, ob der Browser bzw. „Dateien“
    Apps installieren darf: erlauben.
-3. Play Protect warnt eventuell, weil die App nicht aus dem Play Store kommt: „Trotzdem installieren“.
+3. Play Protect warnt eventuell, weil die App nicht aus dem Play Store kommt: Hier steht je nach Smartphone
+   und Android-Version entweder „Trotzdem installieren“ oder so etwas wie „Scannen“; nach abgeschlossenem
+   Scan kann die App installiert werden.
 4. App öffnen und **Kalender** sowie **Benachrichtigungen** erlauben.
-5. Im Tab **Einstellungen** alle roten Punkte auf grün bringen, vor allem **Akku-Optimierung aus**.
-   Bei Samsung, Xiaomi, Huawei & Co. zusätzlich in den App-Einstellungen unter Akku
+5. Im Tab **Einstellungen** alle roten Punkte auf grün bringen, vor allem **Akku-Optimierung aus** und
+   **Vollbild zulassen**. Bei Samsung, Xiaomi, Huawei & Co. zusätzlich in den App-Einstellungen unter Akku
    „Nicht eingeschränkt“ wählen (Details je Hersteller: [dontkillmyapp.com](https://dontkillmyapp.com)).
 6. **Testwecker in 10 Sekunden** drücken, Bildschirm sperren und prüfen, dass er klingelt.
 
@@ -89,7 +91,8 @@ Eine Internet-Berechtigung hat die App nicht.
 ## Mitmachen
 
 Fehlerberichte, Ideen und Pull Requests sind willkommen. Wie das abläuft, steht in
-[CONTRIBUTING.md](CONTRIBUTING.md). Kurz: Repository forken, Änderung auf einem eigenen Branch machen,
+[CONTRIBUTING.md](CONTRIBUTING.md).
+Kurz: Repository forken, Änderung auf einem eigenen Branch machen,
 Pull Request stellen – jeder Pull Request wird vor dem Übernehmen geprüft.
 
 ## Selbst bauen
@@ -110,21 +113,6 @@ Unter Windows kann der Build an zu langen Pfaden scheitern. Dann ein kurzes Buil
 ```powershell
 .\gradlew.bat assembleDebug "-Pterminwecker.buildRoot=C:/tmp/tw"
 ```
-
-### Release-APK signieren
-
-Für eine signierte Release-APK eine Datei `keystore.properties` im Projektordner anlegen
-(sie wird nicht eingecheckt):
-
-```properties
-storeFile=C:/pfad/zu/deinem-schluessel.jks
-storePassword=…
-keyAlias=…
-keyPassword=…
-```
-
-Danach `./gradlew assembleRelease`. Ohne diese Datei wird die Release-APK mit dem Debug-Schlüssel signiert.
-`build-apk.ps1` ist das Skript des Maintainers für die offiziellen Releases.
 
 ## Technik
 

@@ -30,11 +30,13 @@ Requirements: Android 8.0 or newer and a calendar that is synced to the phone.
    **[Terminwecker.apk](https://github.com/NicklasThiele/Terminwecker/releases/latest/download/Terminwecker.apk)**
    (all versions under [Releases](https://github.com/NicklasThiele/Terminwecker/releases)).
 2. Tap the downloaded file. Android asks once whether your browser or “Files” may install apps: allow it.
-3. Play Protect may warn you because the app doesn’t come from the Play Store: choose “Install anyway”.
+3. Play Protect may warn you because the app doesn’t come from the Play Store. Depending on your phone
+   and Android version, you’ll see either “Install anyway” or something like “Scan”; once the scan is
+   finished, the app can be installed.
 4. Open the app and allow **Calendar** and **Notifications**.
-5. In the **Settings** tab, turn all red items green, especially **Battery optimization off**.
-   On Samsung, Xiaomi, Huawei & co., also set battery usage to “Unrestricted” in the app settings
-   (details per manufacturer: [dontkillmyapp.com](https://dontkillmyapp.com)).
+5. In the **Settings** tab, turn all red items green, especially **Battery optimization off** and
+   **Full-screen alarm**. On Samsung, Xiaomi, Huawei & co., also set battery usage to “Unrestricted” in
+   the app settings (details per manufacturer: [dontkillmyapp.com](https://dontkillmyapp.com)).
 6. Tap **Test alarm in 10 seconds**, lock the screen and check that it rings.
 
 ### Updating
@@ -110,21 +112,6 @@ On Windows the build can fail because of long paths. In that case, use a short b
 ```powershell
 .\gradlew.bat assembleDebug "-Pterminwecker.buildRoot=C:/tmp/tw"
 ```
-
-### Signing a release APK
-
-For a signed release APK, create a file `keystore.properties` in the project folder
-(it is not checked in):
-
-```properties
-storeFile=C:/path/to/your-key.jks
-storePassword=…
-keyAlias=…
-keyPassword=…
-```
-
-Then run `./gradlew assembleRelease`. Without this file the release APK is signed with the debug key.
-`build-apk.ps1` is the maintainer’s script for the official releases.
 
 ## How it works
 
