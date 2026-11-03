@@ -1,0 +1,22 @@
+# Gradle / Android
+.gradle/
+.kotlin/
+build/
+captures/
+local.properties
+
+# Signierschlüssel – niemals einchecken
+keystore.properties
+*.jks
+*.keystore
+
+# Fertige APKs werden als GitHub-Release verteilt, nicht im Repo
+*.apk
+*.aab
+
+# IDEs und Betriebssystem
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
