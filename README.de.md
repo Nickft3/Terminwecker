@@ -2,7 +2,7 @@
 
 [English](README.md) | **Deutsch**
 
-[![Build](https://github.com/NicklasThiele/Terminwecker/actions/workflows/build.yml/badge.svg)](https://github.com/NicklasThiele/Terminwecker/actions/workflows/build.yml)
+[![Build](https://github.com/Nickft3/Terminwecker/actions/workflows/build.yml/badge.svg)](https://github.com/Nickft3/Terminwecker/actions/workflows/build.yml)
 [![Lizenz: GPL-3.0](https://img.shields.io/badge/Lizenz-GPL--3.0-blue.svg)](LICENSE)
 
 Android-App, die für Termine aus deinem Kalender **echte Wecker** stellt – mit Vollbild, Ton,
@@ -30,8 +30,8 @@ Voraussetzung: Android 8.0 oder neuer und ein Kalender, der auf dem Handy synchr
 ## Download und Installation
 
 1. Auf dem Handy die neueste APK herunterladen:
-   **[Terminwecker.apk](https://github.com/NicklasThiele/Terminwecker/releases/latest/download/Terminwecker.apk)**
-   (alle Versionen unter [Releases](https://github.com/NicklasThiele/Terminwecker/releases)).
+   **[Terminwecker.apk](https://github.com/Nickft3/Terminwecker/releases/latest/download/Terminwecker.apk)**
+   (alle Versionen unter [Releases](https://github.com/Nickft3/Terminwecker/releases)).
 2. Die heruntergeladene Datei antippen. Android fragt einmalig, ob der Browser bzw. „Dateien“
    Apps installieren darf: erlauben.
 3. Play Protect warnt eventuell, weil die App nicht aus dem Play Store kommt: Hier steht je nach Smartphone

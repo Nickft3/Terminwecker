@@ -2,7 +2,7 @@
 
 **English** | [Deutsch](README.de.md)
 
-[![Build](https://github.com/NicklasThiele/Terminwecker/actions/workflows/build.yml/badge.svg)](https://github.com/NicklasThiele/Terminwecker/actions/workflows/build.yml)
+[![Build](https://github.com/Nickft3/Terminwecker/actions/workflows/build.yml/badge.svg)](https://github.com/Nickft3/Terminwecker/actions/workflows/build.yml)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 
 Android app that sets **real alarms** for events in your calendar – full screen, sound, vibration
@@ -27,8 +27,8 @@ Requirements: Android 8.0 or newer and a calendar that is synced to the phone.
 ## Download and installation
 
 1. On your phone, download the latest APK:
-   **[Terminwecker.apk](https://github.com/NicklasThiele/Terminwecker/releases/latest/download/Terminwecker.apk)**
-   (all versions under [Releases](https://github.com/NicklasThiele/Terminwecker/releases)).
+   **[Terminwecker.apk](https://github.com/Nickft3/Terminwecker/releases/latest/download/Terminwecker.apk)**
+   (all versions under [Releases](https://github.com/Nickft3/Terminwecker/releases)).
 2. Tap the downloaded file. Android asks once whether your browser or “Files” may install apps: allow it.
 3. Play Protect may warn you because the app doesn’t come from the Play Store. Depending on your phone
    and Android version, you’ll see either “Install anyway” or something like “Scan”; once the scan is
