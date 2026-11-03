@@ -20,8 +20,13 @@ android {
         applicationId = "de.terminwecker"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
+    }
+
+    // Erzeugt die Sprachliste für „App-Sprache“ in den Android-Einstellungen (ab Android 13).
+    androidResources {
+        generateLocaleConfig = true
     }
 
     signingConfigs {

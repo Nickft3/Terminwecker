@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.WorkerThread
+import de.terminwecker.R
 import de.terminwecker.data.AlarmPayload
 import de.terminwecker.data.CalendarRepository
 import de.terminwecker.data.NextAlarm
@@ -110,8 +111,8 @@ object AlarmScheduler {
         val at = System.currentTimeMillis() + delaySeconds * 1000L
         val payload = AlarmPayload(
             ruleId = AlarmPayload.TEST_RULE_ID,
-            label = "Testwecker",
-            eventTitle = "So klingt dein Terminwecker",
+            label = context.getString(R.string.test_alarm_label),
+            eventTitle = context.getString(R.string.test_alarm_text),
             eventBegin = at,
             allDay = false,
             trigger = at,

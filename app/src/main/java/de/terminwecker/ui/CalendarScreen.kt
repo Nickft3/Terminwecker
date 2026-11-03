@@ -1,6 +1,7 @@
 package de.terminwecker.ui
 
 import android.Manifest
+import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -62,9 +63,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import de.terminwecker.R
 import de.terminwecker.alarm.AlarmMath
 import de.terminwecker.data.AppSettings
 import de.terminwecker.data.CalendarInfo
@@ -92,9 +95,8 @@ fun CalendarScreen(vm: MainViewModel, onEventClick: (EventInstance) -> Unit) {
 
     if (!status.calendar) {
         PermissionHint(
-            text = "Damit Terminwecker deine Termine anzeigen kann, braucht die App Lesezugriff auf den Kalender. " +
-                "Dein Google-Kalender wird dabei nur lokal vom Gerät gelesen – ohne Login und ohne Internet.",
-            button = "Kalenderzugriff erlauben",
+            text = stringResource(R.string.calendar_permission_text),
+            button = stringResource(R.string.calendar_permission_button),
             onClick = requestCalendar,
         )
         return
@@ -178,12 +180,12 @@ internal fun CalendarViewMenu(current: CalendarView, onSelect: (CalendarView) ->
     var open by remember { mutableStateOf(false) }
     Box {
         IconButton(onClick = { open = true }) {
-            Icon(viewIcon(current), contentDescription = "Ansicht: ${viewName(current)}")
+            Icon(viewIcon(current), contentDescription = stringResource(R.string.view_current, stringResource(viewName(current))))
         }
         DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
             CalendarView.entries.forEach { view ->
                 DropdownMenuItem(
-                    text = { Text(viewName(view)) },
+                    text = { Text(stringResource(viewName(view))) },
                     leadingIcon = { Icon(viewIcon(view), contentDescription = null) },
                     trailingIcon = { if (view == current) Icon(Icons.Filled.Check, contentDescription = null) },
                     onClick = {
@@ -196,11 +198,12 @@ internal fun CalendarViewMenu(current: CalendarView, onSelect: (CalendarView) ->
     }
 }
 
-private fun viewName(view: CalendarView): String = when (view) {
-    CalendarView.LIST -> "Terminliste"
-    CalendarView.DAY -> "Tag"
-    CalendarView.THREE_DAYS -> "3 Tage"
-    CalendarView.WEEK -> "Woche"
+@StringRes
+private fun viewName(view: CalendarView): Int = when (view) {
+    CalendarView.LIST -> R.string.view_list
+    CalendarView.DAY -> R.string.view_day
+    CalendarView.THREE_DAYS -> R.string.view_three_days
+    CalendarView.WEEK -> R.string.view_week
 }
 
 private fun viewIcon(view: CalendarView): ImageVector = when (view) {
@@ -260,27 +263,30 @@ private fun CalendarList(
                 value = query,
                 onValueChange = { query = it },
                 modifier = Modifier.weight(1f),
-                placeholder = { Text("Termin suchen …") },
+                placeholder = { Text(stringResource(R.string.search_placeholder)) },
                 leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
                 trailingIcon = {
                     if (query.isNotEmpty()) {
-                        IconButton(onClick = { query = "" }) { Icon(Icons.Filled.Close, contentDescription = "Suche leeren") }
+                        IconButton(onClick = { query = "" }) {
+                            Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.search_clear))
+                        }
                     }
                 },
                 singleLine = true,
             )
             IconButton(onClick = onPickDate) {
-                Icon(Icons.Filled.Today, contentDescription = "Zu Datum springen")
+                Icon(Icons.Filled.Today, contentDescription = stringResource(R.string.jump_to_date))
             }
             IconButton(onClick = onFilter) {
-                Icon(Icons.Filled.FilterList, contentDescription = "Kalender auswählen")
+                Icon(Icons.Filled.FilterList, contentDescription = stringResource(R.string.choose_calendars))
             }
         }
         if (loading) LinearProgressIndicator(Modifier.fillMaxWidth())
 
         if (rows.isEmpty() && !loading) {
             Text(
-                if (query.isBlank()) "Keine kommenden Termine gefunden." else "Keine Termine zu „${query.trim()}“ gefunden.",
+                if (query.isBlank()) stringResource(R.string.no_upcoming_events)
+                else stringResource(R.string.no_events_for_query, query.trim()),
                 modifier = Modifier.padding(24.dp),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -312,9 +318,9 @@ private fun JumpToDateDialog(initial: LocalDate, onDismiss: () -> Unit, onPick: 
             TextButton(onClick = {
                 onDismiss()
                 state.selectedDateMillis?.let { onPick(Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).toLocalDate()) }
-            }) { Text("Springen") }
+            }) { Text(stringResource(R.string.action_jump)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Abbrechen") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     ) {
         DatePicker(state = state)
     }
@@ -329,8 +335,8 @@ private fun CalendarFilterDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        confirmButton = { TextButton(onClick = onDismiss) { Text("Fertig") } },
-        title = { Text("Angezeigte Kalender") },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_done)) } },
+        title = { Text(stringResource(R.string.shown_calendars)) },
         text = {
             LazyColumn {
                 items(calendars, key = { it.id }) { cal ->
@@ -389,7 +395,7 @@ private fun EventRow(inst: EventInstance, hasAlarm: Boolean, onClick: () -> Unit
             )
         },
         headlineContent = {
-            Text(inst.title.ifBlank { "(Ohne Titel)" }, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(inst.title.ifBlank { stringResource(R.string.untitled) }, maxLines = 2, overflow = TextOverflow.Ellipsis)
         },
         supportingContent = {
             Text(
@@ -407,7 +413,7 @@ private fun EventRow(inst: EventInstance, hasAlarm: Boolean, onClick: () -> Unit
                 if (inst.isPartOfSeries) {
                     Icon(
                         Icons.Filled.Repeat,
-                        contentDescription = "Serie",
+                        contentDescription = stringResource(R.string.series),
                         modifier = Modifier.size(18.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -415,7 +421,7 @@ private fun EventRow(inst: EventInstance, hasAlarm: Boolean, onClick: () -> Unit
                 if (hasAlarm) {
                     Icon(
                         Icons.Filled.Alarm,
-                        contentDescription = "Wecker gestellt",
+                        contentDescription = stringResource(R.string.alarm_set),
                         modifier = Modifier
                             .padding(start = 8.dp)
                             .size(22.dp),
@@ -424,7 +430,7 @@ private fun EventRow(inst: EventInstance, hasAlarm: Boolean, onClick: () -> Unit
                 } else {
                     Icon(
                         Icons.Outlined.AlarmAdd,
-                        contentDescription = "Wecker stellen",
+                        contentDescription = stringResource(R.string.set_alarm),
                         modifier = Modifier
                             .padding(start = 8.dp)
                             .size(22.dp),

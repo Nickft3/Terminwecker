@@ -59,6 +59,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -66,6 +67,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import de.terminwecker.R
 import de.terminwecker.alarm.AlarmMath
 import de.terminwecker.data.AlarmRule
 import de.terminwecker.data.CalendarInfo
@@ -74,7 +76,7 @@ import de.terminwecker.data.RuleScope
 import de.terminwecker.data.TimingMode
 
 private val MINUTE_PRESETS = listOf(0, 5, 10, 15, 30, 60, 120, 1440)
-private val DAY_OFFSETS = listOf(0 to "Am Termintag", -1 to "Am Vortag", -2 to "2 Tage vorher")
+private val DAY_OFFSETS = listOf(0 to R.string.offset_same_day, -1 to R.string.offset_day_before, -2 to R.string.offset_two_days)
 
 /** Vollbild-Dialog zum Anlegen oder Bearbeiten eines Weckers. */
 @Composable
@@ -161,17 +163,20 @@ private fun EditorContent(
     val existingForEvent = remember(rules, inst) {
         inst?.let { i -> rules.filter { AlarmMath.matches(it, i) } } ?: emptyList()
     }
+    val fallbackLabel = stringResource(R.string.alarm_default_label)
     val defaultLabel = when {
-        scope == RuleScope.TITLE -> titleQuery.trim().ifBlank { "Wecker" }
-        else -> existing?.eventTitle ?: inst?.title ?: "Wecker"
+        scope == RuleScope.TITLE -> titleQuery.trim().ifBlank { fallbackLabel }
+        else -> existing?.eventTitle ?: inst?.title ?: fallbackLabel
     }
 
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface) {
         Column(Modifier.fillMaxSize()) {
             TopAppBar(
-                title = { Text(if (existing != null) "Wecker bearbeiten" else "Wecker stellen") },
+                title = { Text(stringResource(if (existing != null) R.string.edit_alarm else R.string.set_alarm)) },
                 navigationIcon = {
-                    IconButton(onClick = onDismiss) { Icon(Icons.Filled.Close, contentDescription = "Schließen") }
+                    IconButton(onClick = onDismiss) {
+                        Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.action_close))
+                    }
                 },
                 actions = {
                     TextButton(
@@ -180,7 +185,7 @@ private fun EditorContent(
                             draft?.let(vm::saveRule)
                             onDismiss()
                         },
-                    ) { Text("Speichern") }
+                    ) { Text(stringResource(R.string.action_save)) }
                 },
                 windowInsets = WindowInsets(0),
             )
@@ -203,33 +208,33 @@ private fun EditorContent(
                 }
 
                 if (existingForEvent.isNotEmpty()) {
-                    SectionLabel("Bereits gestellt")
+                    SectionLabel(stringResource(R.string.already_set))
                     existingForEvent.forEach { r ->
                         ExistingRuleRow(r, onEdit = { onEditRule(r) }, onDelete = { vm.deleteRule(r) })
                     }
-                    SectionLabel("Weiteren Wecker hinzufügen")
+                    SectionLabel(stringResource(R.string.add_another))
                 }
 
                 if (existing == null) {
-                    SectionLabel("Gilt für")
+                    SectionLabel(stringResource(R.string.applies_to))
                     if (inst != null) {
                         RadioRow(
                             selected = scope == RuleScope.SINGLE,
-                            title = "Nur diesen Termin",
+                            title = stringResource(R.string.scope_single),
                             subtitle = Fmt.eventMoment(inst.begin, inst.allDay),
                         ) { scope = RuleScope.SINGLE }
                         if (inst.isPartOfSeries) {
                             RadioRow(
                                 selected = scope == RuleScope.SERIES,
-                                title = "Ganze Terminserie",
-                                subtitle = "Alle Wiederholungen, auch einzeln verschobene",
+                                title = stringResource(R.string.scope_series),
+                                subtitle = stringResource(R.string.scope_series_hint),
                             ) { scope = RuleScope.SERIES }
                         }
                     }
                     RadioRow(
                         selected = scope == RuleScope.TITLE,
-                        title = "Alle Termine mit diesem Titel",
-                        subtitle = "Auch künftige Termine und neue Serien mit gleichem Namen",
+                        title = stringResource(R.string.scope_title),
+                        subtitle = stringResource(R.string.scope_title_hint),
                     ) { scope = RuleScope.TITLE }
                 }
 
@@ -238,21 +243,21 @@ private fun EditorContent(
                     OutlinedTextField(
                         value = titleQuery,
                         onValueChange = { titleQuery = it },
-                        label = { Text("Titel / Stichwort") },
+                        label = { Text(stringResource(R.string.title_keyword)) },
                         singleLine = true,
                         isError = titleQuery.isBlank(),
                         modifier = Modifier.fillMaxWidth(),
                     )
                     CheckRow(
                         checked = titleExact,
-                        title = "Titel muss genau übereinstimmen",
-                        subtitle = "Sonst reicht es, wenn der Text im Titel vorkommt",
+                        title = stringResource(R.string.title_exact),
+                        subtitle = stringResource(R.string.title_exact_hint),
                     ) { titleExact = it }
                     CalendarDropdown(calendars, titleCalendarId) { titleCalendarId = it }
                 }
 
-                SectionLabel("Wann klingeln?")
-                RadioRow(selected = timing == TimingMode.RELATIVE, title = "Vor Terminbeginn", subtitle = null) {
+                SectionLabel(stringResource(R.string.when_ring))
+                RadioRow(selected = timing == TimingMode.RELATIVE, title = stringResource(R.string.timing_before), subtitle = null) {
                     timing = TimingMode.RELATIVE
                 }
                 if (timing == TimingMode.RELATIVE) {
@@ -266,14 +271,14 @@ private fun EditorContent(
                             FilterChip(
                                 selected = minutes == m,
                                 onClick = { minutesText = m.toString() },
-                                label = { Text(if (m == 0) "Zu Beginn" else Fmt.duration(m)) },
+                                label = { Text(if (m == 0) stringResource(R.string.at_start) else Fmt.duration(m)) },
                             )
                         }
                     }
                     OutlinedTextField(
                         value = minutesText,
                         onValueChange = { minutesText = it.filter(Char::isDigit).take(5) },
-                        label = { Text("Minuten vorher") },
+                        label = { Text(stringResource(R.string.minutes_before)) },
                         singleLine = true,
                         isError = minutes == null,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -282,14 +287,14 @@ private fun EditorContent(
                             .width(200.dp),
                     )
                 }
-                RadioRow(selected = timing == TimingMode.FIXED_TIME, title = "Feste Uhrzeit", subtitle = null) {
+                RadioRow(selected = timing == TimingMode.FIXED_TIME, title = stringResource(R.string.timing_fixed_label), subtitle = null) {
                     timing = TimingMode.FIXED_TIME
                 }
                 if (timing == TimingMode.FIXED_TIME) {
                     OutlinedButton(onClick = { showTimePicker = true }, modifier = Modifier.padding(start = 40.dp)) {
                         Icon(Icons.Filled.Schedule, contentDescription = null)
                         Spacer(Modifier.size(8.dp))
-                        Text("${Fmt.minuteOfDay(fixedMinute)} Uhr")
+                        Text(Fmt.clock(fixedMinute))
                     }
                     Row(
                         Modifier
@@ -298,31 +303,30 @@ private fun EditorContent(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         DAY_OFFSETS.forEach { (d, text) ->
-                            FilterChip(selected = dayOffset == d, onClick = { dayOffset = d }, label = { Text(text) })
+                            FilterChip(selected = dayOffset == d, onClick = { dayOffset = d }, label = { Text(stringResource(text)) })
                         }
                     }
                 }
 
-                SectionLabel("Beschriftung")
+                SectionLabel(stringResource(R.string.label_section))
                 OutlinedTextField(
                     value = labelText,
                     onValueChange = { labelText = it },
-                    label = { Text("Text auf dem Weckerbildschirm (optional)") },
+                    label = { Text(stringResource(R.string.label_hint)) },
                     placeholder = { Text(defaultLabel) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-                SectionLabel("Vorschau")
+                SectionLabel(stringResource(R.string.preview))
                 when {
                     draft == null -> Text(
-                        "Bitte die Eingaben vervollständigen.",
+                        stringResource(R.string.incomplete),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                     )
                     preview.isEmpty() -> Text(
-                        "Derzeit passt kein kommender Termin. Der Wecker wird trotzdem gespeichert und " +
-                            "klingelt, sobald ein passender Termin im Kalender auftaucht.",
+                        stringResource(R.string.preview_none),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                     )
@@ -343,8 +347,7 @@ private fun EditorContent(
 
                 if (scope == RuleScope.SERIES) {
                     Text(
-                        "Hinweis: Wenn du eine Serie in Google Kalender „ab diesem Termin“ änderst, legt Google " +
-                            "intern eine neue Serie an. Mit „Alle Termine mit diesem Titel“ bleibt der Wecker auch dann dran.",
+                        stringResource(R.string.series_hint),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = 16.dp),
@@ -358,7 +361,7 @@ private fun EditorContent(
             val state = rememberTimePickerState(
                 initialHour = fixedMinute / 60,
                 initialMinute = fixedMinute % 60,
-                is24Hour = true,
+                is24Hour = Fmt.is24Hour,
             )
             AlertDialog(
                 onDismissRequest = { showTimePicker = false },
@@ -366,9 +369,11 @@ private fun EditorContent(
                     TextButton(onClick = {
                         fixedMinute = state.hour * 60 + state.minute
                         showTimePicker = false
-                    }) { Text("OK") }
+                    }) { Text(stringResource(R.string.action_ok)) }
                 },
-                dismissButton = { TextButton(onClick = { showTimePicker = false }) { Text("Abbrechen") } },
+                dismissButton = {
+                    TextButton(onClick = { showTimePicker = false }) { Text(stringResource(R.string.action_cancel)) }
+                },
                 text = { TimePicker(state = state) },
             )
         }
@@ -393,13 +398,14 @@ private fun EventInfoCard(inst: EventInstance) {
                     .background(calendarColor(inst.color)),
             )
             Column(Modifier.padding(start = 12.dp)) {
-                Text(inst.title.ifBlank { "(Ohne Titel)" }, style = MaterialTheme.typography.titleMedium)
+                Text(inst.title.ifBlank { stringResource(R.string.untitled) }, style = MaterialTheme.typography.titleMedium)
                 Text(
                     Fmt.localDateText(inst) + " · " + Fmt.eventTime(inst),
                     style = MaterialTheme.typography.bodyMedium,
                 )
+                val seriesNote = if (inst.isPartOfSeries) " · " + stringResource(R.string.part_of_series) else ""
                 Text(
-                    inst.calendarName + if (inst.isPartOfSeries) " · Teil einer Serie" else "",
+                    inst.calendarName + seriesNote,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -424,8 +430,8 @@ private fun ExistingRuleRow(rule: AlarmRule, onEdit: () -> Unit, onDelete: () ->
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        IconButton(onClick = onEdit) { Icon(Icons.Filled.Edit, contentDescription = "Bearbeiten") }
-        IconButton(onClick = onDelete) { Icon(Icons.Filled.Delete, contentDescription = "Löschen") }
+        IconButton(onClick = onEdit) { Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.action_edit)) }
+        IconButton(onClick = onDelete) { Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.action_delete)) }
     }
 }
 
@@ -470,16 +476,18 @@ private fun CheckRow(checked: Boolean, title: String, subtitle: String, onChange
 @Composable
 private fun CalendarDropdown(calendars: List<CalendarInfo>, selected: Long, onSelect: (Long) -> Unit) {
     var open by remember { mutableStateOf(false) }
-    val name = if (selected < 0) "Alle Kalender" else calendars.firstOrNull { it.id == selected }?.name ?: "Kalender"
+    val allCalendars = stringResource(R.string.all_calendars)
+    val name = if (selected < 0) allCalendars
+    else calendars.firstOrNull { it.id == selected }?.name ?: stringResource(R.string.calendar)
     Box(Modifier.padding(top = 4.dp)) {
         OutlinedButton(onClick = { open = true }) {
             Icon(Icons.Filled.CalendarMonth, contentDescription = null)
             Spacer(Modifier.size(8.dp))
-            Text("Kalender: $name")
+            Text(stringResource(R.string.calendar_selected, name))
         }
         DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
             DropdownMenuItem(
-                text = { Text("Alle Kalender") },
+                text = { Text(allCalendars) },
                 onClick = {
                     onSelect(-1)
                     open = false

@@ -37,11 +37,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import de.terminwecker.R
 import de.terminwecker.data.AlarmPayload
 import de.terminwecker.data.RuleStore
 import de.terminwecker.ui.Fmt
@@ -134,14 +137,14 @@ private fun AlarmScreen(
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    payload.label.ifBlank { "Wecker" },
+                    payload.label.ifBlank { stringResource(R.string.alarm_default_label) },
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Center,
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    AlarmService.describe(payload),
+                    AlarmService.describe(LocalContext.current, payload),
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -149,7 +152,7 @@ private fun AlarmScreen(
                 if (payload.snoozeCount > 0) {
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        "${payload.snoozeCount}× geschlummert",
+                        stringResource(R.string.snoozed_count, payload.snoozeCount),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -165,7 +168,7 @@ private fun AlarmScreen(
                 ) {
                     Icon(Icons.Filled.Snooze, contentDescription = null)
                     Spacer(Modifier.size(8.dp))
-                    Text("Schlummern ($snoozeMinutes Min.)", fontSize = 18.sp)
+                    Text(stringResource(R.string.snooze_button, snoozeMinutes), fontSize = 18.sp)
                 }
                 Button(
                     onClick = onDismiss,
@@ -176,7 +179,7 @@ private fun AlarmScreen(
                 ) {
                     Icon(Icons.Filled.AlarmOff, contentDescription = null)
                     Spacer(Modifier.size(8.dp))
-                    Text("Aus", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.action_dismiss), fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
                 }
                 Spacer(Modifier.height(16.dp))
             }

@@ -31,7 +31,10 @@ damit wir die Richtung abstimmen können, bevor du viel Zeit investierst.
 ## Stil
 
 - Kotlin im offiziellen Code-Stil (`kotlin.code.style=official`), UI mit Jetpack Compose.
-- Texte in der App sind auf Deutsch.
+- Keine festen Texte im Code: Jeder Text, den Nutzer sehen, gehört in
+  `app/src/main/res/values/strings.xml` (Englisch, Standard) **und** `values-de/strings.xml` (Deutsch).
+  Neue Sprachen sind willkommen: einfach `values-xx/strings.xml` anlegen.
+- Datum und Uhrzeit immer über `Fmt` formatieren, damit Sprache und 12-/24-Stunden-Format stimmen.
 - Kommentare kurz und auf Deutsch, wie im übrigen Code.
 - Neue Bibliotheken nur, wenn es wirklich nötig ist. Die App soll ohne Internet-Berechtigung,
   Werbung und Tracking auskommen.

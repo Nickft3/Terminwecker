@@ -60,6 +60,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
@@ -69,6 +72,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.terminwecker.R
 import de.terminwecker.data.CalendarView
 import de.terminwecker.data.EventInstance
 import kotlinx.coroutines.launch
@@ -282,19 +286,29 @@ fun CalendarGrid(
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
-                    Icon(Icons.Filled.ArrowDropDown, contentDescription = "Datum wählen", tint = MaterialTheme.colorScheme.onSurface)
+                    Icon(
+                        Icons.Filled.ArrowDropDown,
+                        contentDescription = stringResource(R.string.choose_date),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
                 }
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = { scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) } }) {
-                    Icon(Icons.Filled.ChevronLeft, contentDescription = "Zurück")
+                    Icon(Icons.Filled.ChevronLeft, contentDescription = stringResource(R.string.previous))
                 }
                 IconButton(onClick = { scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) } }) {
-                    Icon(Icons.Filled.ChevronRight, contentDescription = "Weiter")
+                    Icon(Icons.Filled.ChevronRight, contentDescription = stringResource(R.string.next))
                 }
-                IconButton(onClick = { scope.launch { pagerState.animateScrollToPage(paging.pageOf(today)) } }) {
+                val todayLabel = stringResource(R.string.go_to_today)
+                IconButton(
+                    onClick = { scope.launch { pagerState.animateScrollToPage(paging.pageOf(today)) } },
+                    modifier = Modifier.semantics { contentDescription = todayLabel },
+                ) {
                     TodayIcon(today.dayOfMonth)
                 }
-                IconButton(onClick = onFilter) { Icon(Icons.Filled.FilterList, contentDescription = "Kalender auswählen") }
+                IconButton(onClick = onFilter) {
+                    Icon(Icons.Filled.FilterList, contentDescription = stringResource(R.string.choose_calendars))
+                }
             }
 
             Box(Modifier.weight(1f)) {
@@ -343,7 +357,7 @@ private fun TodayIcon(day: Int) {
 private fun DayHeaderRow(days: List<LocalDate>, today: LocalDate, view: CalendarView, onDayClick: (LocalDate) -> Unit) {
     Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(
-            "KW\n${days.first().get(WeekFields.ISO.weekOfWeekBasedYear())}",
+            stringResource(R.string.week_number, days.first().get(WeekFields.ISO.weekOfWeekBasedYear())),
             modifier = Modifier.width(GutterWidth),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -460,7 +474,7 @@ private fun TimeGrid(
         Box(Modifier.width(GutterWidth).height(HourHeight * 24)) {
             for (hour in 1 until 24) {
                 Text(
-                    "%02d:00".format(hour),
+                    Fmt.hour(hour),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
@@ -592,6 +606,8 @@ private fun EventBlock(
     ) {
         val lines = with(LocalDensity.current) { (maxHeight.toPx() / lineHeight.toPx()).toInt() }.coerceAtLeast(1)
         val detailText = details?.takeIf { lines >= 2 }
+        val title = inst.title.ifBlank { stringResource(R.string.untitled) }
+        val alarmSet = stringResource(R.string.alarm_set)
         Column(verticalArrangement = Arrangement.Top) {
             Text(
                 buildAnnotatedString {
@@ -599,11 +615,11 @@ private fun EventBlock(
                         appendInlineContent(ALARM_ICON, "⏰")
                         append(' ')
                     }
-                    append(inst.title.ifBlank { "(Ohne Titel)" })
+                    append(title)
                 },
                 inlineContent = mapOf(
                     ALARM_ICON to InlineTextContent(Placeholder(11.sp, 11.sp, PlaceholderVerticalAlign.TextCenter)) {
-                        Icon(Icons.Filled.Alarm, contentDescription = "Wecker gestellt", tint = content, modifier = Modifier.fillMaxSize())
+                        Icon(Icons.Filled.Alarm, contentDescription = alarmSet, tint = content, modifier = Modifier.fillMaxSize())
                     },
                 ),
                 color = content,

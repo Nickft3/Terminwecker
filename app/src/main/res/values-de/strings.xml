@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Allgemein -->
+    <string name="action_open">Öffnen</string>
+    <string name="action_fix">Beheben</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="action_done">Fertig</string>
+    <string name="action_ok">OK</string>
+    <string name="action_save">Speichern</string>
+    <string name="action_close">Schließen</string>
+    <string name="action_edit">Bearbeiten</string>
+    <string name="action_delete">Löschen</string>
+    <string name="action_jump">Springen</string>
+    <string name="action_dismiss">Aus</string>
+    <string name="more">Mehr</string>
+    <string name="untitled">(Ohne Titel)</string>
+    <string name="series">Serie</string>
+    <string name="alarm_set">Wecker gestellt</string>
+    <string name="set_alarm">Wecker stellen</string>
+    <string name="alarm_default_label">Wecker</string>
+
+    <!-- Hauptbildschirm -->
+    <string name="tab_calendar">Kalender</string>
+    <string name="tab_alarms">Wecker</string>
+    <string name="tab_settings">Einstellungen</string>
+    <string name="search_events">Termin suchen</string>
+    <string name="banner_ringing">Wecker klingelt: %1$s</string>
+    <string name="banner_missing_permissions">Es fehlen Berechtigungen – Wecker klingeln sonst evtl. nicht.</string>
+
+    <!-- Kalender -->
+    <string name="calendar_permission_text">Damit Terminwecker deine Termine anzeigen kann, braucht die App Lesezugriff auf den Kalender. Dein Google-Kalender wird dabei nur lokal vom Gerät gelesen – ohne Login und ohne Internet.</string>
+    <string name="calendar_permission_button">Kalenderzugriff erlauben</string>
+    <string name="view_list">Terminliste</string>
+    <string name="view_day">Tag</string>
+    <string name="view_three_days">3 Tage</string>
+    <string name="view_week">Woche</string>
+    <string name="view_current">Ansicht: %1$s</string>
+    <string name="search_placeholder">Termin suchen …</string>
+    <string name="search_clear">Suche leeren</string>
+    <string name="jump_to_date">Zu Datum springen</string>
+    <string name="choose_date">Datum wählen</string>
+    <string name="choose_calendars">Kalender auswählen</string>
+    <string name="shown_calendars">Angezeigte Kalender</string>
+    <string name="no_upcoming_events">Keine kommenden Termine gefunden.</string>
+    <string name="no_events_for_query">Keine Termine zu „%1$s“ gefunden.</string>
+    <string name="previous">Zurück</string>
+    <string name="next">Weiter</string>
+    <string name="go_to_today">Heute</string>
+    <string name="week_number">KW\n%1$d</string>
+
+    <!-- Weckerliste -->
+    <string name="no_alarms_title">Noch keine Wecker</string>
+    <string name="no_alarms_text">Tippe im Kalender auf einen Termin, um dafür einen Wecker zu stellen – für den einzelnen Termin, die ganze Serie oder alle Termine mit gleichem Titel.</string>
+    <string name="keyword_alarm">Stichwort-Wecker</string>
+    <string name="delete_alarm_title">Wecker löschen?</string>
+    <string name="delete_alarm_text">„%1$s“ – %2$s</string>
+    <string name="alarm_disabled">Ausgeschaltet</string>
+    <string name="event_past_or_deleted">Termin ist vorbei oder wurde gelöscht</string>
+    <string name="no_upcoming_match">Kein kommender Termin gefunden</string>
+    <string name="next_alarm">Nächster Wecker: %1$s</string>
+    <string name="next_alarm_for">für %1$s · %2$s</string>
+    <plurals name="skipped_events">
+        <item quantity="one">%d Termin wird übersprungen</item>
+        <item quantity="other">%d Termine werden übersprungen</item>
+    </plurals>
+    <string name="skip_next">Nächsten Termin überspringen</string>
+    <string name="clear_skips">Überspringen aufheben</string>
+
+    <!-- Wecker-Editor -->
+    <string name="edit_alarm">Wecker bearbeiten</string>
+    <string name="already_set">Bereits gestellt</string>
+    <string name="add_another">Weiteren Wecker hinzufügen</string>
+    <string name="applies_to">Gilt für</string>
+    <string name="scope_single">Nur diesen Termin</string>
+    <string name="scope_series">Ganze Terminserie</string>
+    <string name="scope_series_hint">Alle Wiederholungen, auch einzeln verschobene</string>
+    <string name="scope_title">Alle Termine mit diesem Titel</string>
+    <string name="scope_title_hint">Auch künftige Termine und neue Serien mit gleichem Namen</string>
+    <string name="title_keyword">Titel / Stichwort</string>
+    <string name="title_exact">Titel muss genau übereinstimmen</string>
+    <string name="title_exact_hint">Sonst reicht es, wenn der Text im Titel vorkommt</string>
+    <string name="all_calendars">Alle Kalender</string>
+    <string name="calendar">Kalender</string>
+    <string name="calendar_selected">Kalender: %1$s</string>
+    <string name="when_ring">Wann klingeln?</string>
+    <string name="timing_before">Vor Terminbeginn</string>
+    <string name="at_start">Zu Beginn</string>
+    <string name="minutes_before">Minuten vorher</string>
+    <string name="timing_fixed_label">Feste Uhrzeit</string>
+    <string name="offset_same_day">Am Termintag</string>
+    <string name="offset_day_before">Am Vortag</string>
+    <string name="offset_two_days">2 Tage vorher</string>
+    <string name="label_section">Beschriftung</string>
+    <string name="label_hint">Text auf dem Weckerbildschirm (optional)</string>
+    <string name="preview">Vorschau</string>
+    <string name="incomplete">Bitte die Eingaben vervollständigen.</string>
+    <string name="preview_none">Derzeit passt kein kommender Termin. Der Wecker wird trotzdem gespeichert und klingelt, sobald ein passender Termin im Kalender auftaucht.</string>
+    <string name="series_hint">Hinweis: Wenn du eine Serie in Google Kalender „ab diesem Termin“ änderst, legt Google intern eine neue Serie an. Mit „Alle Termine mit diesem Titel“ bleibt der Wecker auch dann dran.</string>
+    <string name="part_of_series">Teil einer Serie</string>
+
+    <!-- Einstellungen -->
+    <string name="settings_permissions">Berechtigungen &amp; Zuverlässigkeit</string>
+    <string name="perm_calendar">Kalender lesen</string>
+    <string name="perm_calendar_desc">Um deine Termine anzuzeigen und Serien zu verfolgen</string>
+    <string name="perm_notifications">Benachrichtigungen</string>
+    <string name="perm_notifications_desc">Damit der klingelnde Wecker angezeigt wird</string>
+    <string name="perm_exact">Exakte Wecker</string>
+    <string name="perm_exact_desc">Damit der Wecker auf die Minute genau klingelt</string>
+    <string name="perm_fullscreen">Vollbild-Wecker</string>
+    <string name="perm_fullscreen_desc">Wecker über dem Sperrbildschirm anzeigen</string>
+    <string name="perm_battery">Akku-Optimierung aus</string>
+    <string name="perm_battery_desc">Verhindert, dass Android die App im Hintergrund beendet</string>
+    <string name="battery_tip">Tipp: Bei Samsung, Xiaomi, Huawei, OnePlus &amp; Co. zusätzlich in den App-Einstellungen unter Akku „Nicht eingeschränkt“ bzw. „Autostart“ erlauben. Anleitungen je Hersteller: dontkillmyapp.com</string>
+    <string name="open_app_settings">App-Einstellungen öffnen</string>
+    <string name="status_ok">OK</string>
+    <string name="status_missing">Fehlt</string>
+    <string name="section_alarm">Wecker</string>
+    <string name="alarm_sound">Weckton</string>
+    <string name="sound_system">System-Weckton</string>
+    <string name="sound_system_default">System-Weckton (Standard)</string>
+    <string name="sound_builtin">Eingebauter Piepton</string>
+    <string name="sound_other">Anderer Ton …</string>
+    <string name="sound_selected">Ausgewählter Ton</string>
+    <string name="vibration">Vibration</string>
+    <string name="snooze_duration">Schlummerdauer</string>
+    <string name="auto_off_after">Automatisch aus nach</string>
+    <string name="minutes_short">%1$d Min.</string>
+    <string name="section_test">Testen</string>
+    <string name="test_text">Stellt einen Testwecker in 10 Sekunden. Sperr ruhig den Bildschirm, um den Vollbild-Wecker zu prüfen.</string>
+    <string name="test_button">Testwecker in 10 Sekunden</string>
+    <string name="test_toast">Testwecker klingelt in 10 Sekunden</string>
+    <string name="section_info">Info</string>
+    <string name="info_text">Terminwecker %1$s · liest deinen Kalender nur lokal auf dem Gerät – ohne Internet und ohne Google-Login. Wecker werden nach Neustart, Zeitumstellung und Kalenderänderungen automatisch neu geplant.</string>
+
+    <!-- Klingelnder Wecker -->
+    <string name="snooze_button">Schlummern (%1$d Min.)</string>
+    <string name="snoozed_count">%1$d× geschlummert</string>
+    <string name="alarm_event">Termin: %1$s · %2$s</string>
+    <string name="missed_alarm">Verpasster Wecker: %1$s</string>
+    <string name="test_alarm_label">Testwecker</string>
+    <string name="test_alarm_text">So klingt dein Terminwecker</string>
+    <string name="channel_alarm">Klingelnder Wecker</string>
+    <string name="channel_alarm_desc">Wird angezeigt, solange ein Wecker klingelt</string>
+    <string name="channel_info">Hinweise</string>
+    <string name="channel_info_desc">Verpasste Wecker</string>
+
+    <!-- Formatierung -->
+    <string name="fmt_date_time">%1$s, %2$s Uhr</string>
+    <string name="fmt_clock">%1$s Uhr</string>
+    <string name="fmt_all_day_suffix">%1$s (ganztägig)</string>
+    <string name="fmt_today">Heute · %1$s</string>
+    <string name="fmt_tomorrow">Morgen · %1$s</string>
+    <string name="fmt_all_day">Ganztägig</string>
+    <plurals name="fmt_all_day_days">
+        <item quantity="one">Ganztägig (%d Tag)</item>
+        <item quantity="other">Ganztägig (%d Tage)</item>
+    </plurals>
+    <plurals name="fmt_days">
+        <item quantity="one">%d Tag</item>
+        <item quantity="other">%d Tage</item>
+    </plurals>
+    <string name="fmt_hours">%1$d Std.</string>
+    <string name="fmt_hours_minutes">%1$d Std. %2$d Min.</string>
+    <string name="fmt_minutes">%1$d Min.</string>
+    <string name="timing_at_start">Zum Terminbeginn</string>
+    <string name="timing_before_start">%1$s vor Beginn</string>
+    <string name="timing_fixed">Um %1$s %2$s</string>
+    <string name="timing_on_day">am Termintag</string>
+    <string name="timing_day_before">am Vortag</string>
+    <plurals name="timing_days_before">
+        <item quantity="one">%d Tag vorher</item>
+        <item quantity="other">%d Tage vorher</item>
+    </plurals>
+    <string name="scope_single_recurring">Ein Termin der Serie „%1$s“ (%2$s)</string>
+    <string name="scope_single_event">Einzeltermin „%1$s“</string>
+    <string name="scope_whole_series">Ganze Serie „%1$s“</string>
+    <string name="scope_title_exact">Alle Termine mit Titel „%1$s“</string>
+    <string name="scope_title_contains">Alle Termine mit „%1$s“ im Titel</string>
+    <string name="scope_in_calendar">%1$s im Kalender %2$s</string>
+</resources>

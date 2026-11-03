@@ -50,11 +50,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import de.terminwecker.R
 import de.terminwecker.alarm.AlarmActivity
 import de.terminwecker.alarm.AlarmService
 import de.terminwecker.data.AlarmRule
@@ -131,7 +133,11 @@ private fun MainScreen(tabRequest: MutableIntState, vm: MainViewModel = viewMode
         if (needed.isNotEmpty()) firstRunPermissions.launch(needed.toTypedArray())
     }
 
-    val titles = listOf("Kalender", "Wecker", "Einstellungen")
+    val titles = listOf(
+        stringResource(R.string.tab_calendar),
+        stringResource(R.string.tab_alarms),
+        stringResource(R.string.tab_settings),
+    )
     Scaffold(
         topBar = {
             TopAppBar(
@@ -140,7 +146,7 @@ private fun MainScreen(tabRequest: MutableIntState, vm: MainViewModel = viewMode
                     if (tab == MainActivity.TAB_CALENDAR && status.calendar) {
                         if (settings.calendarView != CalendarView.LIST) {
                             IconButton(onClick = { vm.updateSettings { it.copy(calendarView = CalendarView.LIST) } }) {
-                                Icon(Icons.Filled.Search, contentDescription = "Termin suchen")
+                                Icon(Icons.Filled.Search, contentDescription = stringResource(R.string.search_events))
                             }
                         }
                         CalendarViewMenu(settings.calendarView) { view -> vm.updateSettings { it.copy(calendarView = view) } }
@@ -191,15 +197,15 @@ private fun MainScreen(tabRequest: MutableIntState, vm: MainViewModel = viewMode
         Column(Modifier.padding(padding).fillMaxSize()) {
             ringing?.let { payload ->
                 Banner(
-                    text = "Wecker klingelt: ${payload.label}",
-                    action = "Öffnen",
+                    text = stringResource(R.string.banner_ringing, payload.label),
+                    action = stringResource(R.string.action_open),
                     onAction = { context.startActivity(AlarmActivity.intent(context)) },
                 )
             }
             if (!status.critical && tab != MainActivity.TAB_SETTINGS) {
                 Banner(
-                    text = "Es fehlen Berechtigungen – Wecker klingeln sonst evtl. nicht.",
-                    action = "Beheben",
+                    text = stringResource(R.string.banner_missing_permissions),
+                    action = stringResource(R.string.action_fix),
                     onAction = { tab = MainActivity.TAB_SETTINGS },
                 )
             }

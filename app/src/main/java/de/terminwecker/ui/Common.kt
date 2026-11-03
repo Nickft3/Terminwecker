@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
+import de.terminwecker.R
 import de.terminwecker.data.AlarmRule
 import de.terminwecker.data.RuleScope
 
@@ -26,7 +27,8 @@ import de.terminwecker.data.RuleScope
 fun calendarColor(color: Int): Color = Color(color or 0xFF000000.toInt())
 
 fun ruleTitle(rule: AlarmRule): String =
-    rule.label.ifBlank { if (rule.scope == RuleScope.TITLE) rule.titleQuery else rule.eventTitle }.ifBlank { "Wecker" }
+    rule.label.ifBlank { if (rule.scope == RuleScope.TITLE) rule.titleQuery else rule.eventTitle }
+        .ifBlank { Fmt.str(R.string.alarm_default_label) }
 
 fun Context.findActivity(): Activity? {
     var c: Context = this

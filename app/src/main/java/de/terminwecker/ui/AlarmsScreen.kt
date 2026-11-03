@@ -38,11 +38,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import de.terminwecker.R
 import de.terminwecker.data.AlarmRule
 import de.terminwecker.data.NextAlarm
 import de.terminwecker.data.RuleScope
@@ -72,10 +75,13 @@ fun AlarmsScreen(vm: MainViewModel, onEdit: (AlarmRule) -> Unit, onNewKeyword: (
                     modifier = Modifier.size(64.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                Text("Noch keine Wecker", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp))
                 Text(
-                    "Tippe im Kalender auf einen Termin, um dafür einen Wecker zu stellen – für den einzelnen Termin, " +
-                        "die ganze Serie oder alle Termine mit gleichem Titel.",
+                    stringResource(R.string.no_alarms_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(top = 16.dp),
+                )
+                Text(
+                    stringResource(R.string.no_alarms_text),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -103,7 +109,7 @@ fun AlarmsScreen(vm: MainViewModel, onEdit: (AlarmRule) -> Unit, onNewKeyword: (
         ExtendedFloatingActionButton(
             onClick = onNewKeyword,
             icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-            text = { Text("Stichwort-Wecker") },
+            text = { Text(stringResource(R.string.keyword_alarm)) },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
@@ -113,15 +119,15 @@ fun AlarmsScreen(vm: MainViewModel, onEdit: (AlarmRule) -> Unit, onNewKeyword: (
     confirmDelete?.let { rule ->
         AlertDialog(
             onDismissRequest = { confirmDelete = null },
-            title = { Text("Wecker löschen?") },
-            text = { Text("„${ruleTitle(rule)}“ – ${Fmt.scope(rule)}") },
+            title = { Text(stringResource(R.string.delete_alarm_title)) },
+            text = { Text(stringResource(R.string.delete_alarm_text, ruleTitle(rule), Fmt.scope(rule))) },
             confirmButton = {
                 TextButton(onClick = {
                     vm.deleteRule(rule)
                     confirmDelete = null
-                }) { Text("Löschen") }
+                }) { Text(stringResource(R.string.action_delete)) }
             },
-            dismissButton = { TextButton(onClick = { confirmDelete = null }) { Text("Abbrechen") } },
+            dismissButton = { TextButton(onClick = { confirmDelete = null }) { Text(stringResource(R.string.action_cancel)) } },
         )
     }
 }
@@ -158,29 +164,29 @@ private fun RuleCard(
                 Column(Modifier.weight(1f)) {
                     when {
                         !rule.enabled -> Text(
-                            "Ausgeschaltet",
+                            stringResource(R.string.alarm_disabled),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         next == null && rule.scope == RuleScope.SINGLE -> Text(
-                            "Termin ist vorbei oder wurde gelöscht",
+                            stringResource(R.string.event_past_or_deleted),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         next == null -> Text(
-                            "Kein kommender Termin gefunden",
+                            stringResource(R.string.no_upcoming_match),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.error,
                         )
                         else -> {
                             Text(
-                                "Nächster Wecker: ${Fmt.dateTime(next.trigger)}",
+                                stringResource(R.string.next_alarm, Fmt.dateTime(next.trigger)),
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Medium,
                                 color = MaterialTheme.colorScheme.primary,
                             )
                             Text(
-                                "für ${next.eventTitle} · ${Fmt.eventMoment(next.eventBegin, next.allDay)}",
+                                stringResource(R.string.next_alarm_for, next.eventTitle, Fmt.eventMoment(next.eventBegin, next.allDay)),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -188,17 +194,19 @@ private fun RuleCard(
                     }
                     if (rule.skipped.isNotEmpty()) {
                         Text(
-                            if (rule.skipped.size == 1) "1 Termin wird übersprungen" else "${rule.skipped.size} Termine werden übersprungen",
+                            pluralStringResource(R.plurals.skipped_events, rule.skipped.size, rule.skipped.size),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.tertiary,
                         )
                     }
                 }
                 Box {
-                    IconButton(onClick = { menu = true }) { Icon(Icons.Filled.MoreVert, contentDescription = "Mehr") }
+                    IconButton(onClick = { menu = true }) {
+                        Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.more))
+                    }
                     DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
                         DropdownMenuItem(
-                            text = { Text("Bearbeiten") },
+                            text = { Text(stringResource(R.string.action_edit)) },
                             leadingIcon = { Icon(Icons.Filled.Edit, contentDescription = null) },
                             onClick = {
                                 menu = false
@@ -207,7 +215,7 @@ private fun RuleCard(
                         )
                         if (rule.enabled && next != null) {
                             DropdownMenuItem(
-                                text = { Text("Nächsten Termin überspringen") },
+                                text = { Text(stringResource(R.string.skip_next)) },
                                 leadingIcon = { Icon(Icons.Filled.SkipNext, contentDescription = null) },
                                 onClick = {
                                     menu = false
@@ -217,7 +225,7 @@ private fun RuleCard(
                         }
                         if (rule.skipped.isNotEmpty()) {
                             DropdownMenuItem(
-                                text = { Text("Überspringen aufheben") },
+                                text = { Text(stringResource(R.string.clear_skips)) },
                                 leadingIcon = { Icon(Icons.AutoMirrored.Filled.Undo, contentDescription = null) },
                                 onClick = {
                                     menu = false
@@ -226,7 +234,7 @@ private fun RuleCard(
                             )
                         }
                         DropdownMenuItem(
-                            text = { Text("Löschen") },
+                            text = { Text(stringResource(R.string.action_delete)) },
                             leadingIcon = { Icon(Icons.Filled.Delete, contentDescription = null) },
                             onClick = {
                                 menu = false

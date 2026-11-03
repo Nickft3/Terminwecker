@@ -98,8 +98,8 @@ class AlarmService : Service() {
         )
         return NotificationCompat.Builder(this, Notifications.CHANNEL_ALARM)
             .setSmallIcon(R.drawable.ic_stat_alarm)
-            .setContentTitle(payload.label.ifBlank { "Wecker" })
-            .setContentText(describe(payload))
+            .setContentTitle(payload.label.ifBlank { getString(R.string.alarm_default_label) })
+            .setContentText(describe(this, payload))
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -107,8 +107,8 @@ class AlarmService : Service() {
             .setAutoCancel(false)
             .setFullScreenIntent(fullScreen, true)
             .setContentIntent(fullScreen)
-            .addAction(0, "Schlummern (${settings().snoozeMinutes} Min.)", snooze)
-            .addAction(0, "Aus", dismiss)
+            .addAction(0, getString(R.string.snooze_button, settings().snoozeMinutes), snooze)
+            .addAction(0, getString(R.string.action_dismiss), dismiss)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .build()
     }
@@ -187,8 +187,8 @@ class AlarmService : Service() {
             )
             val n = NotificationCompat.Builder(this, Notifications.CHANNEL_INFO)
                 .setSmallIcon(R.drawable.ic_stat_alarm)
-                .setContentTitle("Verpasster Wecker: ${payload.label}")
-                .setContentText(describe(payload))
+                .setContentTitle(getString(R.string.missed_alarm, payload.label))
+                .setContentText(describe(this, payload))
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .setContentIntent(open)
                 .setAutoCancel(true)
@@ -251,8 +251,8 @@ class AlarmService : Service() {
             context.startService(Intent(context, AlarmService::class.java).setAction(action))
         }
 
-        fun describe(payload: AlarmPayload): String =
+        fun describe(context: Context, payload: AlarmPayload): String =
             if (payload.ruleId == AlarmPayload.TEST_RULE_ID) payload.eventTitle
-            else "Termin: ${payload.eventTitle} · ${Fmt.eventMoment(payload.eventBegin, payload.allDay)}"
+            else context.getString(R.string.alarm_event, payload.eventTitle, Fmt.eventMoment(payload.eventBegin, payload.allDay))
     }
 }
